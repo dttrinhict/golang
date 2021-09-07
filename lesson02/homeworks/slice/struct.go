@@ -3,7 +3,6 @@ package slice
 import (
 	"fmt"
 	"sort"
-	"strings"
 )
 
 type NhanVien struct {
@@ -21,14 +20,8 @@ https://stackoverflow.com/questions/36122668/how-to-sort-struct-with-multiple-so
 */
 func SortByName(nhanViens []NhanVien) ([]NhanVien) {
 	sort.Slice(nhanViens, func(i, j int) bool {
-		switch strings.Compare(nhanViens[i].Ten, nhanViens[j].Ten) {
-		case -1:
-			return true
-		case 1:
-			return false
-		}
-		return nhanViens[i].Ten > nhanViens[j].Ten
-	}) // Nhờ thấy Cương giải thích thêm về cách hàm này chạy
+		return nhanViens[i].Ten < nhanViens[j].Ten
+	})
 	return nhanViens
 }
 
@@ -38,8 +31,8 @@ https://yourbasic.org/golang/how-to-sort-in-go/
  */
 func SortBySalary(nhanViens []NhanVien) ([]NhanVien) {
 	sort.Slice(nhanViens, func(i, j int) bool {
-		return nhanViens[i].HeSo*1500000+nhanViens[i].TroCap < nhanViens[j].HeSo*1500000+nhanViens[j].TroCap
-	}) // Nhờ thấy Cương giải thích thêm về cách hàm này chạy
+		return Salary(nhanViens[i]) < Salary(nhanViens[j])
+	})
 	return nhanViens
 }
 

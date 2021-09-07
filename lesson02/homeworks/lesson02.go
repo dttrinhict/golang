@@ -54,4 +54,11 @@ func main() {
 	for _, v := range nvs {
 		fmt.Println(slice.ToString(&v))
 	}
+
+	// Lesson01
+	daySoNguyenTo := slice.DaySoNguyenTo(100)
+	fmt.Println("Day các số nguyên tố trong dãy số nguyên dương liên tiếp 100 phần tử là:")
+	for _,v := range daySoNguyenTo {
+		fmt.Printf("%v ", v)
+	}
 }
