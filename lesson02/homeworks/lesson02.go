@@ -6,7 +6,7 @@ import (
 )
 func main() {
 	//Bài 1 Viết function tìm ra số lớn thứ nhì trong mảng các số.
-	args1 := []float64{1,9,2,8.4,3,7,4,6,5,8.8,4}
+	args1 := []float64{1,9,2,8.4,9,3,7,4,6,9,5,8.8,4}
 	fmt.Println("Số lớn thứ nhì trong mảng các số ", args1)
 	max2 := slice.Max2Numbers(args1)
 	fmt.Println(max2)
