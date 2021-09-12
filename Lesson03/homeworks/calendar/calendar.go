@@ -2,6 +2,7 @@ package calendar
 
 import (
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -31,22 +32,24 @@ func Calendar() (calendar [5][7]int){
 */
 func Calendar() (calendar [5][7]int){
 	now := time.Now() // Time now
-	dayOfWeek := now.Weekday() // Ngày hiện tại trong tuần (thứ)
-	dateOfMonth := now.Day() // Ngày hiện tại trong tháng
+	//dayOfWeek := now.Weekday() // Ngày hiện tại trong tuần (thứ)
+	dayOfMonth := now.Day() // Ngày hiện tại trong tháng
 	month := now.Month() // Tháng hiện tại trong năm
 	year := now.Year() // Năm hiện tại
 	numDayOfMonth := NumDayOfMonth(month, year) // Số này của tháng hiện tại
-	firstDayOfMonth := now.Weekday() - (time.Weekday(dateOfMonth%7)) + 1 // Ngày trong tuần của ngày 1 của tháng
-
+	if numDayOfMonth == 0 {
+		log.Printf("Error: Có lỗi về giờ của hệ thống")
+		return
+	}
+	firstDayOfMonth := 7 - (time.Weekday(dayOfMonth%7)) + 1 // Ngày trong tuần của ngày 1 của tháng
 	numDays :=  numDayOfMonth + int(firstDayOfMonth) -1 // Số ngày của tháng công ngày bù để tính lịch
-	//calendar := [5][7]int{} // Khai báo calendar là một mảng số nguyên 2 chiều
 	for j := 0; j <= numDays ; j++ {
 		a := j%7 // ngày trong tuần
 		b := j/7 // tuần trong tháng
-		if j+1 - int(dayOfWeek - time.Weekday(dateOfMonth%7) + 1) <= 0 {
+		if j < int(firstDayOfMonth) {
 			calendar[b][a] = 0
 		}else{
-			calendar[b][a] = j+1 - int(dayOfWeek - time.Weekday(dateOfMonth%7) + 1)
+			calendar[b][a] = j+1 - int(firstDayOfMonth)
 		}
 	}
 	return calendar

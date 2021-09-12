@@ -2,21 +2,21 @@ package docker
 
 import (
 	"context"
-	"github.com/docker/docker/api/types/filters"
-	"io"
-	"os"
-
+	"fmt"
 	"github.com/docker/docker/api/types"
-	"github.com/docker/docker/api/types/container"
+	"github.com/docker/docker/api/types/filters"
 	"github.com/docker/docker/client"
-	"github.com/docker/docker/pkg/stdcopy"
+	"strings"
+	"time"
 )
-
+/* Định nghĩa struct Docker
+*/
 type Docker struct {
 	ctx context.Context
 	Client *client.Client
 }
-
+/* Khởi tạo đối được Docker Client
+*/
 func InitDocker() (docker *Docker) {
 	ctx := context.Background()
 	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
@@ -28,11 +28,14 @@ func InitDocker() (docker *Docker) {
 		Client: cli,
 	}
 }
-
+/* Lấy ra danh sách tất cả các containers
+*/
 func (d *Docker) DockerContainerListAll() (containers []types.Container, err error){
 	return d.Client.ContainerList(d.ctx, types.ContainerListOptions{All: true})
 }
 
+/* Lấy ra danh sách containers đang chạy
+*/
 func (d *Docker) DockerContainerListRunning() (containers []types.Container, err error){
 	filter := filters.NewArgs()
 	//filter.Add("status", "exited")
@@ -41,8 +44,37 @@ func (d *Docker) DockerContainerListRunning() (containers []types.Container, err
 			Filters: filter,
 		})
 }
+/* Start một container đang stoped
+*/
+func (d *Docker) DockerContainerStart(containerID string) (err error){
+	return d.Client.ContainerStart(d.ctx, containerID, types.ContainerStartOptions{})
+}
 
+/* Stop container đang running
+*/
+func (d *Docker) DockerContainerStop(containerID string) (err error){
+	duration := 30 * time.Second
+	return d.Client.ContainerStop(d.ctx, containerID, &duration)
+}
 
+/* Lấy ra danh sách containers có name xác định
+*/
+func (d *Docker) DockerGetContainerByName(containerName string) (result []types.Container, err error) {
+	containers, err := d.DockerContainerListAll()
+	if err != nil {
+		return nil, err
+	}
+	for _, v := range containers {
+		for _, name := range v.Names {
+			if strings.Compare(name, containerName) == 0 {
+				result = append(result, v)
+			}
+		}
+	}
+	return result, err
+}
+/* Lấy ra danh sách các containers stoped
+*/
 func (d *Docker) DockerContainerListExited() (containers []types.Container, err error){
 	filter := filters.NewArgs()
 	filter.Add("status", "exited")
@@ -51,46 +83,22 @@ func (d *Docker) DockerContainerListExited() (containers []types.Container, err 
 		Filters: filter,
 	})
 }
-
-func DockerExample() {
-	ctx := context.Background()
-	cli, err := client.NewClientWithOpts(client.FromEnv, client.WithAPIVersionNegotiation())
-	if err != nil {
-		panic(err)
-	}
-
-	reader, err := cli.ImagePull(ctx, "docker.io/library/alpine", types.ImagePullOptions{})
-	if err != nil {
-		panic(err)
-	}
-	io.Copy(os.Stdout, reader)
-
-	resp, err := cli.ContainerCreate(ctx, &container.Config{
-		Image: "alpine",
-		Cmd:   []string{"echo", "hello world"},
-		Tty:   false,
-	}, nil, nil, nil, "")
-	if err != nil {
-		panic(err)
-	}
-
-	if err := cli.ContainerStart(ctx, resp.ID, types.ContainerStartOptions{}); err != nil {
-		panic(err)
-	}
-
-	statusCh, errCh := cli.ContainerWait(ctx, resp.ID, container.WaitConditionNotRunning)
-	select {
-	case err := <-errCh:
-		if err != nil {
-			panic(err)
+/* In danh sách containers
+*/
+func (d *Docker) DockerPrint(containers []types.Container) {
+	fmt.Printf("%64s %25s %60s %15v:%5v  %s\n","ID", "Names", "Image", "IP","Port", "Status")
+	for _, c := range containers {
+		ports := c.Ports
+		var port types.Port
+		if len(ports) > 0 {
+			port = ports[0]
 		}
-	case <-statusCh:
+		status := c.Status
+		if strings.Contains(status, "Exited") {
+			status = "stopped"
+		}else{
+			status = "running"
+		}
+		fmt.Printf("%s %25s %60s %15v:%5v  %s\n",c.ID, c.Names[0], c.Image, port.IP,port.PublicPort, status)
 	}
-
-	out, err := cli.ContainerLogs(ctx, resp.ID, types.ContainerLogsOptions{ShowStdout: true})
-	if err != nil {
-		panic(err)
-	}
-
-	stdcopy.StdCopy(os.Stdout, os.Stderr, out)
 }
