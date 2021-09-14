@@ -5,6 +5,7 @@ import (
 )
 
 func main()  {
-	cal := calendar.Calendar()
-	calendar.PrintCalendar(cal)
+	cal2 := calendar.InitCalendar()
+	c := cal2.Calendar2()
+	cal2.PrintCalendar2(c)
 }
