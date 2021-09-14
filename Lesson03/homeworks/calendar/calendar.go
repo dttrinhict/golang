@@ -32,7 +32,7 @@ func Calendar() (calendar [5][7]int){
 */
 func Calendar() (calendar [5][7]int){
 	now := time.Now() // Time now
-	//dayOfWeek := now.Weekday() // Ngày hiện tại trong tuần (thứ)
+	dayOfWeek := now.Weekday() // Ngày hiện tại trong tuần (thứ)
 	dayOfMonth := now.Day() // Ngày hiện tại trong tháng
 	month := now.Month() // Tháng hiện tại trong năm
 	year := now.Year() // Năm hiện tại
@@ -41,7 +41,14 @@ func Calendar() (calendar [5][7]int){
 		log.Printf("Error: Có lỗi về giờ của hệ thống")
 		return
 	}
-	firstDayOfMonth := 7 - (time.Weekday(dayOfMonth%7)) + 1 // Ngày trong tuần của ngày 1 của tháng
+	firstDayOfMonth := int(dayOfWeek) - (dayOfMonth%7) + 1
+	if firstDayOfMonth < 0 {
+		firstDayOfMonth = firstDayOfMonth + 7
+	}else if firstDayOfMonth < 7 {
+		firstDayOfMonth = firstDayOfMonth
+	}else{
+		firstDayOfMonth = 0
+	}// Ngày trong tuần của ngày 1 của tháng
 	numDays :=  numDayOfMonth + int(firstDayOfMonth) -1 // Số ngày của tháng công ngày bù để tính lịch
 	for j := 0; j <= numDays ; j++ {
 		a := j%7 // ngày trong tuần
