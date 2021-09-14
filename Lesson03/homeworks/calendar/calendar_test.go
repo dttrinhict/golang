@@ -1,54 +1,59 @@
 package calendar
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
+
 //go test -bench .
+
+var cal = InitCalendar()
+/* Benchmark for FirstDayOfMonth2 method of Cal struct
+*/
+func BenchmarkCal_FirstDayOfMonth2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = cal.FirstDayOfMonth2()
+	}
+}
+
+/*Benchmark for NumDayOfMonth func
+*/
+func BenchmarkNumDayOfMonth(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = NumDayOfMonth(time.September, 2021)
+	}
+}
+
+/*Benchmark for Calendar2 method of Cal struct
+ */
+func BenchmarkCal_Calendar2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = cal.Calendar2()
+	}
+}
+
+/*Benchmark for PrintCalendar2 method
+*/
+//func BenchmarkCal_PrintCalendar2(b *testing.B) {
+//	c := cal.Calendar2()
+//	for i := 0; i < b.N; i++ {
+//		c.PrintCalendar2(c)
+//	}
+//}
+
+/*Benchmark for PrintDay function
+*/
+//func BenchmarkPrintDay(b *testing.B) {
+//	for i := 0; i < b.N; i++ {
+//		PrintDay(4)
+//	}
+//}
+
+
 /*Benchmark_Calendar
 */
 func Benchmark_Calendar(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_ = Calendar()
-	}
-}
-/*Benchmark_PrintCalendar
- */
-func Benchmark_PrintCalendar(b *testing.B) {
-	cal := [5][7]int{}
-	cal[0][0] = 0
-	cal[0][1] = 0
-	cal[0][2] = 0
-	cal[0][3] = 1
-	cal[0][4] = 2
-	cal[0][5] = 3
-	cal[0][6] = 4
-	cal[1][0] = 5
-	cal[1][1] = 6
-	cal[1][2] = 7
-	cal[1][3] = 8
-	cal[1][4] = 9
-	cal[1][5] = 10
-	cal[1][6] = 11
-	cal[2][0] = 12
-	cal[2][1] = 13
-	cal[2][2] = 14
-	cal[2][3] = 15
-	cal[2][4] = 16
-	cal[2][5] = 17
-	cal[2][6] = 18
-	cal[3][0] = 19
-	cal[3][1] = 20
-	cal[3][2] = 21
-	cal[3][3] = 22
-	cal[3][4] = 23
-	cal[3][5] = 24
-	cal[3][6] = 25
-	cal[4][0] = 26
-	cal[4][1] = 27
-	cal[4][2] = 28
-	cal[4][3] = 29
-	cal[4][4] = 30
-	cal[4][5] = 0
-	cal[4][6] = 0
-	for i := 0; i < b.N; i++ {
-		PrintCalendar(cal)
 	}
 }
