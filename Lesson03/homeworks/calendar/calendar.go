@@ -30,8 +30,9 @@ func Calendar() (calendar [5][7]int){
 	return calendar
 }
 */
-func Calendar() (calendar [5][7]int){
+func Calendar() (calendar [6][7]int){
 	now := time.Now() // Time now
+	//now := time.Date(2021,13, 2, 0, 0, 0, 0, time.Local)
 	dayOfWeek := now.Weekday() // Ngày hiện tại trong tuần (thứ)
 	dayOfMonth := now.Day() // Ngày hiện tại trong tháng
 	month := now.Month() // Tháng hiện tại trong năm
@@ -89,7 +90,7 @@ func PrintCalendar(calendar [5][7]int)  {
 	}
 }
 */
-func PrintCalendar(calendar [5][7]int)  {
+func PrintCalendar(calendar [6][7]int)  {
 	colorYellow := "\033[33m"
 	colorReset := "\033[0m"
 	colorGreen := "\033[32m"
