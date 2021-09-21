@@ -12,7 +12,7 @@ import (
 var docker *Docker
 var dockerClient *client.Client
 var ctx = context.Background()
-var duration = 10 * time.Second
+var duration = 3 * time.Second
 
 type Docker struct {
 	Context context.Context
