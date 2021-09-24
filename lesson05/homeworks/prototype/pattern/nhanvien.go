@@ -101,7 +101,7 @@ func Demo()  {
 	contract := NewContrat()
 	permanent := NewPermanent()
 
-	var nhanviens []interface{}
+	nhanviens := []INhanVien{}
 	nv1 := permanent.Clone()
 	empIds, err = nv1.ChangeId(1, empIds)
 	if err != nil {
@@ -144,7 +144,7 @@ func Demo()  {
 		fmt.Println(err.Error())
 	}else{
 		nv5.TinhLuong()
-		nhanviens = append(nhanviens, &nv5)
+		nhanviens = append(nhanviens, nv5)
 	}
 
 	/*
@@ -152,12 +152,7 @@ func Demo()  {
 	*/
 	var tongSoTien int = 0
 	for _, v := range nhanviens {
-		if c, okContract := v.(*Contract); okContract { //Golang if assignment statement
-			tongSoTien = tongSoTien + c.TinhLuong()
-		}
-		if p, okPermanent := v.(*Permanent); okPermanent {
-			tongSoTien = tongSoTien + p.TinhLuong()
-		}
+		tongSoTien = tongSoTien + v.TinhLuong()
 	}
 	fmt.Printf("Tổng số tiền phải thanh toán là: %d", tongSoTien)
 }
