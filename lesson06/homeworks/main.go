@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 )
-var inputPath = "/Users/trinhdt2/learn/golang-techmaster/golang/lesson06/homeworks/data/inputmp4/"
-var outputPath = "/Users/trinhdt2/learn/golang-techmaster/golang/lesson06/homeworks/data/outhls/"
+var inputPath = "./data/inputmp4/"
+var outputPath = "./data/outhls/"
 
 func main()  {
 	//converts.Convert(inputPath, outputPath, 15)
