@@ -2,11 +2,13 @@ module github.com/dttrinhict/golang
 
 go 1.17
 
+replace gopkg.in/urfave/cli.v2 => github.com/urfave/cli/v2 v2.2.0
+
 require (
 	github.com/brianvoe/gofakeit/v6 v6.7.1
 	github.com/docker/docker v20.10.8+incompatible
+	github.com/goccy/go-json v0.7.9
 	github.com/matoous/go-nanoid/v2 v2.0.0
-	github.com/xfrr/goffmpeg v0.0.0-20210624103149-5ca2d3062daf
 )
 
 require (
