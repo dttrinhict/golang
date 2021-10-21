@@ -12,7 +12,6 @@ func FileExists(filename string) bool {
 	return !info.IsDir()
 }
 
-
 func CheckEntryExsisted(entries []os.DirEntry, entry os.DirEntry) bool {
 	for _, v := range entries {
 		if entry == v {

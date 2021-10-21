@@ -6,6 +6,7 @@ import (
 )
 
 const ShellToUse = "bash"
+
 /* Exec bash command
 https://stackoverflow.com/questions/6182369/exec-a-shell-command-in-go
 */
