@@ -5,6 +5,4 @@ type User struct {
 	Name       string   `json:"name"`
 	Email      string	`json:"email"`
 	Mobile     string	`json:"mobile"`
-	Int_roles  []int    `json:"int_roles"`
-	Enum_roles []string `json:"enum_roles"`
 }

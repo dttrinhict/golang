@@ -1,4 +1,4 @@
-package postgress
+package databases
 
 import (
 	"context"
@@ -57,7 +57,7 @@ func GetIntance() PostgressDB {
 	random = rand.New(s1)
 
 	PgDB = PostgressDB{
-		DB: DB,
+		DB:     DB,
 		Random: random,
 	}
 	return PgDB

@@ -1,14 +1,14 @@
 package repo
 
 import (
-	"golang/homeworks/lesson10/infrastucture/postgress"
+	"golang/homeworks/lesson10/infrastucture/databases"
 )
 
 type UserPostgressRepoImpl struct {
-	PostgressDB *postgress.PostgressDB
+	PostgressDB *databases.PostgressDB
 }
 
 
 type UserMySQLRepoImpl struct {
-	PostgressDB *postgress.PostgressDB
+	gormDB *databases.MySQLDB
 }

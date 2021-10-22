@@ -29,8 +29,6 @@ func (u DomainUserImpl) Create(user domainmodel.User) (err error) {
 		Name:       user.Name,
 		Email:      user.Email,
 		Mobile:     user.Mobile,
-		Int_roles:  user.Int_roles,
-		Enum_roles: user.Enum_roles,
 	}
 	_,err = u.userRepo.Create(userStorePostgress)
 	return err
@@ -62,8 +60,6 @@ func UserMap(entitiesUser entities.User) domainmodel.User {
 		Name: entitiesUser.Name,
 		Email: entitiesUser.Email,
 		Mobile: entitiesUser.Mobile,
-		Int_roles: entitiesUser.Int_roles,
-		Enum_roles: entitiesUser.Enum_roles,
 	}
 	return domainUser
 }

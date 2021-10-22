@@ -11,8 +11,6 @@ type User struct {
 	Name       string   `json:"name"`
 	Email      string	`json:"email"`
 	Mobile     string	`json:"mobile"`
-	Int_roles  []int    `json:"int_roles"`
-	Enum_roles []string `json:"enum_roles"`
 }
 
 type UserImpl struct {
@@ -38,8 +36,6 @@ func (u UserImpl) UserCreate(user User) (err error) {
 		Name: user.Name,
 		Email: user.Email,
 		Mobile: user.Mobile,
-		Int_roles: user.Int_roles,
-		Enum_roles: user.Enum_roles,
 	}
 	return u.domainUserService.Create(domainUser)
 }
@@ -62,8 +58,6 @@ func MapUserApp(domainUser domainmodel.User) User  {
 		Name: domainUser.Name,
 		Email: domainUser.Email,
 		Mobile: domainUser.Mobile,
-		Int_roles: domainUser.Int_roles,
-		Enum_roles: domainUser.Enum_roles,
 	}
 	return user
 }
@@ -75,8 +69,6 @@ func MapUsersApp(domainUsers []domainmodel.User) (users []User) {
 			Name: domainUser.Name,
 			Email: domainUser.Email,
 			Mobile: domainUser.Mobile,
-			Int_roles: domainUser.Int_roles,
-			Enum_roles: domainUser.Enum_roles,
 		}
 		users = append(users, user)
 	}

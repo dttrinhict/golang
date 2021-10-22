@@ -3,11 +3,11 @@ package repo
 import (
 	"github.com/go-pg/pg/v10"
 	"golang/homeworks/lesson10/entities"
-	"golang/homeworks/lesson10/infrastucture/postgress"
+	"golang/homeworks/lesson10/infrastucture/databases"
 	"golang/homeworks/lesson10/util"
 )
 
-func User_Postgress_Repo(postgressDB *postgress.PostgressDB) UserRepo {
+func User_Postgress_Repo(postgressDB *databases.PostgressDB) UserRepo {
 	return &UserPostgressRepoImpl{
 		PostgressDB: postgressDB,
 	}
@@ -35,16 +35,16 @@ func (u *UserPostgressRepoImpl) Create(user entities.User) (entities.User, error
 		return user, err
 	}
 
-	for _, role := range user.Int_roles {
-		user_role := entities.User_Role{
-			User_id: user.Id,
-			Role_id: role,
-		}
-		_, err = transaction.Model(&user_role).Insert()
-		if !util.Check_err(err, transaction) {
-			return user, err
-		}
-	}
+	//for _, role := range user.Int_roles {
+	//	user_role := entities.User_Role{
+	//		User_id: user.Id,
+	//		Role_id: role,
+	//	}
+	//	_, err = transaction.Model(&user_role).Insert()
+	//	if !util.Check_err(err, transaction) {
+	//		return user, err
+	//	}
+	//}
 	if err = transaction.Commit(); err != nil {
 		return user, err
 	} else {
