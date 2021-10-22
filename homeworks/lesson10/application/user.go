@@ -19,9 +19,11 @@ type UserImpl struct {
 	domainUserService domainservice.DomainUserService
 }
 
+
 type UserApp interface {
 	UserCreate(user *User) (err error)
-	GetUser() (users []User, err error)
+	GetUser() (users User, err error)
+	GetUsers() (users []User, err error)
 }
 
 func User_App(domainUserService domainservice.DomainUserService) UserApp {
@@ -39,18 +41,19 @@ func (u UserImpl) UserCreate(user *User) (err error) {
 		Int_roles: user.Int_roles,
 		Enum_roles: user.Enum_roles,
 	}
-	return u.domainUserService.UserCreate(&domainUser)
+	return u.domainUserService.Create(&domainUser)
 }
 
-func (u UserImpl) GetUser() (users []User, err error)  {
-	domainUsers, err := u.domainUserService.GetUser()
+func (u UserImpl) GetUsers() (users []User, err error)  {
+	domainUsers, err := u.domainUserService.GetUsers()
 	if err != nil {
 		return nil, err
 	}
-	for _, domainUser := range domainUsers {
-		users = append(users, MapUserApp(domainUser))
-	}
-	return users, nil
+	return MapUsersApp(domainUsers), nil
+}
+
+func (u UserImpl) GetUser() (users User, err error) {
+	panic("implement me")
 }
 
 func MapUserApp(domainUser domainmodel.User) User  {
@@ -63,4 +66,19 @@ func MapUserApp(domainUser domainmodel.User) User  {
 		Enum_roles: domainUser.Enum_roles,
 	}
 	return user
+}
+
+func MapUsersApp(domainUsers []domainmodel.User) (users []User) {
+	for _, domainUser := range domainUsers {
+		user := User{
+			Id: domainUser.Id,
+			Name: domainUser.Name,
+			Email: domainUser.Email,
+			Mobile: domainUser.Mobile,
+			Int_roles: domainUser.Int_roles,
+			Enum_roles: domainUser.Enum_roles,
+		}
+		users = append(users, user)
+	}
+	return users
 }

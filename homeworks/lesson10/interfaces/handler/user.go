@@ -34,7 +34,7 @@ func (user *User)UserCreate(c *fiber.Ctx) (err error) {
 }
 
 func (user *User)GetUser(c *fiber.Ctx) (err error)  {
-	userApp, err := user.UserApp.GetUser()
+	userApp, err := user.UserApp.GetUsers()
 	if err != nil {
 		return util.ResponseErr(c, fiber.StatusBadRequest, err.Error())
 	}

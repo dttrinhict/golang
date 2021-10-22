@@ -11,9 +11,8 @@ import (
 
 func main()  {
 	db := postgress.GetIntance()
-	user_RepoPostgress_Create := repo.User_RepoPostgress_Create(&db)
-	user_Repo_Postgress_Read := repo.User_RepoPostgress_Read(&db)
-	domain_User := domainservices.DomainUser(user_RepoPostgress_Create, user_Repo_Postgress_Read)
+	user_Postgress_Repo := repo.User_Postgress_Repo(&db)
+	domain_User := domainservices.DomainUser(user_Postgress_Repo)
 	user_App := application.User_App(domain_User)
 	user := handler.NewUser(user_App)
 	app := interfaces.NewRouter(user)
