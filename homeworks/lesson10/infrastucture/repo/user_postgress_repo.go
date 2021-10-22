@@ -18,21 +18,21 @@ func (u *UserPostgressRepoImpl) GetUers() (users []entities.User, err error) {
 	return users, err
 }
 
-func (u *UserPostgressRepoImpl) GetUser(userParam *entities.User) (user *entities.User, err error) {
+func (u *UserPostgressRepoImpl) GetUser(userParam entities.User) (user entities.User, err error) {
 	user.Id = userParam.Id
 	err = u.PostgressDB.DB.Model(&user).WherePK().Select()
 	return user, err
 }
 
-func (u *UserPostgressRepoImpl) Create(user *entities.User) (*entities.User, error) {
+func (u *UserPostgressRepoImpl) Create(user entities.User) (entities.User, error) {
 	var transaction *pg.Tx
 	transaction, err  := u.PostgressDB.DB.Begin()
 	if err != nil {
-		return nil, err
+		return user, err
 	}
 	_, err = transaction.Model(&user).Insert()
 	if !util.Check_err(err, transaction) {
-		return nil, err
+		return user, err
 	}
 
 	for _, role := range user.Int_roles {
@@ -42,20 +42,20 @@ func (u *UserPostgressRepoImpl) Create(user *entities.User) (*entities.User, err
 		}
 		_, err = transaction.Model(&user_role).Insert()
 		if !util.Check_err(err, transaction) {
-			return nil, err
+			return user, err
 		}
 	}
 	if err = transaction.Commit(); err != nil {
-		return nil, err
+		return user, err
 	} else {
 		return user, nil
 	}
 }
 
-func (u *UserPostgressRepoImpl) Update(user *entities.User) (*entities.User, error) {
+func (u *UserPostgressRepoImpl) Update(user entities.User) (entities.User, error) {
 	panic("implement me")
 }
 
-func (u *UserPostgressRepoImpl) Delete(user *entities.User) (*entities.User, error) {
+func (u *UserPostgressRepoImpl) Delete(user entities.User) (entities.User, error) {
 	panic("implement me")
 }

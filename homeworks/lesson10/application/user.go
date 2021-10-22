@@ -21,7 +21,7 @@ type UserImpl struct {
 
 
 type UserApp interface {
-	UserCreate(user *User) (err error)
+	UserCreate(user User) (err error)
 	GetUser() (users User, err error)
 	GetUsers() (users []User, err error)
 }
@@ -32,7 +32,7 @@ func User_App(domainUserService domainservice.DomainUserService) UserApp {
 	}
 }
 
-func (u UserImpl) UserCreate(user *User) (err error) {
+func (u UserImpl) UserCreate(user User) (err error) {
 	domainUser := domainmodel.User{
 		Id: util.NewID(),
 		Name: user.Name,
@@ -41,7 +41,7 @@ func (u UserImpl) UserCreate(user *User) (err error) {
 		Int_roles: user.Int_roles,
 		Enum_roles: user.Enum_roles,
 	}
-	return u.domainUserService.Create(&domainUser)
+	return u.domainUserService.Create(domainUser)
 }
 
 func (u UserImpl) GetUsers() (users []User, err error)  {
