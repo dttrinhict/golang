@@ -33,8 +33,20 @@ func (user *User)UserCreate(c *fiber.Ctx) (err error) {
 	return c.JSON(userApp)
 }
 
-func (user *User)GetUser(c *fiber.Ctx) (err error)  {
+func (user *User)GetUsers(c *fiber.Ctx) (err error)  {
 	userApp, err := user.UserApp.GetUsers()
+	if err != nil {
+		return util.ResponseErr(c, fiber.StatusBadRequest, err.Error())
+	}
+	return c.JSON(userApp)
+}
+
+func (user *User)GetUser(c *fiber.Ctx) (err error)  {
+	id := c.Params("id")
+	userApp := application.User{
+		Id: id,
+	}
+	userApp, err = user.UserApp.GetUser(userApp)
 	if err != nil {
 		return util.ResponseErr(c, fiber.StatusBadRequest, err.Error())
 	}

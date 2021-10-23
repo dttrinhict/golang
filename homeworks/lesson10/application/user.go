@@ -3,6 +3,7 @@ package application
 import (
 	domainmodel "golang/homeworks/lesson10/domain/model"
 	domainservice "golang/homeworks/lesson10/domain/services"
+	"golang/homeworks/lesson10/entities"
 	"golang/homeworks/lesson10/util"
 )
 
@@ -20,7 +21,7 @@ type UserImpl struct {
 
 type UserApp interface {
 	UserCreate(user User) (err error)
-	GetUser() (users User, err error)
+	GetUser(user User) (users User, err error)
 	GetUsers() (users []User, err error)
 }
 
@@ -48,8 +49,13 @@ func (u UserImpl) GetUsers() (users []User, err error)  {
 	return MapUsersApp(domainUsers), nil
 }
 
-func (u UserImpl) GetUser() (users User, err error) {
-	panic("implement me")
+func (u UserImpl) GetUser(user User) (users User, err error) {
+	entitiesUser := MapUserAppToUserEntities(user)
+	domainUser, err := u.domainUserService.GetUser(entitiesUser)
+	if err != nil {
+		return users, err
+	}
+	return MapUserApp(domainUser), nil
 }
 
 func MapUserApp(domainUser domainmodel.User) User  {
@@ -58,6 +64,16 @@ func MapUserApp(domainUser domainmodel.User) User  {
 		Name: domainUser.Name,
 		Email: domainUser.Email,
 		Mobile: domainUser.Mobile,
+	}
+	return user
+}
+
+func MapUserAppToUserEntities(userApp User) entities.User  {
+	user := entities.User{
+		Id: userApp.Id,
+		Name: userApp.Name,
+		Email: userApp.Email,
+		Mobile: userApp.Mobile,
 	}
 	return user
 }
