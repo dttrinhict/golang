@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"errors"
 	"golang/homeworks/lesson10/entities"
 	"golang/homeworks/lesson10/infrastucture/databases"
 )
@@ -42,7 +43,12 @@ func (u *UserMySQLRepoImpl) Create(user entities.User) (entities.User, error) {
 }
 
 func (u *UserMySQLRepoImpl) Update(user entities.User) (entities.User, error) {
-	panic("implement me")
+	_, err := u.GetUser(user)
+	if err !=  nil {
+		return user, errors.New("Có lỗi thì get user")
+	}
+	err = u.gormDB.DB.Save(&user).Error
+	return user, err
 }
 
 func (u *UserMySQLRepoImpl) Delete(user entities.User) (entities.User, error) {

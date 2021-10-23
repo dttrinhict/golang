@@ -52,3 +52,14 @@ func (user *User)GetUser(c *fiber.Ctx) (err error)  {
 	}
 	return c.JSON(userApp)
 }
+
+
+func (user *User)UpdateUser(c *fiber.Ctx) (err error)  {
+	userApp := application.User{}
+	err = c.BodyParser(&userApp)
+	userApp, err = user.UserApp.Update(userApp)
+	if err != nil {
+		return util.ResponseErr(c, fiber.StatusBadRequest, err.Error())
+	}
+	return c.JSON(userApp)
+}

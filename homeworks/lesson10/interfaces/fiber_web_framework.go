@@ -10,5 +10,6 @@ func NewRouter(user *handler.User) *fiber.App {
 	app.Post("/users", user.UserCreate)
 	app.Get("/users", user.GetUsers)
 	app.Get("/user/:id", user.GetUser)
+	app.Put("/user", user.UpdateUser)
 	return app
 }

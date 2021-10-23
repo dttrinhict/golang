@@ -23,6 +23,7 @@ type UserApp interface {
 	UserCreate(user User) (err error)
 	GetUser(user User) (users User, err error)
 	GetUsers() (users []User, err error)
+	Update(user User)(User, error)
 }
 
 func User_App(domainUserService domainservice.DomainUserService) UserApp {
@@ -58,6 +59,12 @@ func (u UserImpl) GetUser(user User) (users User, err error) {
 	return MapUserApp(domainUser), nil
 }
 
+func (u UserImpl) Update(user User)(User, error)  {
+	domainUser := MapUserAppToUserDomain(user)
+	_, err := u.domainUserService.Update(domainUser)
+	return user, err
+}
+
 func MapUserApp(domainUser domainmodel.User) User  {
 	user := User{
 		Id: domainUser.Id,
@@ -70,6 +77,16 @@ func MapUserApp(domainUser domainmodel.User) User  {
 
 func MapUserAppToUserEntities(userApp User) entities.User  {
 	user := entities.User{
+		Id: userApp.Id,
+		Name: userApp.Name,
+		Email: userApp.Email,
+		Mobile: userApp.Mobile,
+	}
+	return user
+}
+
+func MapUserAppToUserDomain(userApp User) domainmodel.User  {
+	user := domainmodel.User{
 		Id: userApp.Id,
 		Name: userApp.Name,
 		Email: userApp.Email,

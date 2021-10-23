@@ -14,6 +14,7 @@ type DomainUserService interface {
 	Create(user domainmodel.User) (err error)
 	GetUser(userParam entities.User)(user domainmodel.User, err error)
 	GetUsers()(users []domainmodel.User, err error)
+	Update(userParam domainmodel.User)(domainmodel.User, error)
 }
 
 func DomainUser(userRepo repo.UserRepo) DomainUserService {
@@ -53,6 +54,14 @@ func (u DomainUserImpl) GetUsers() (users []domainmodel.User, err error) {
 	return users, err
 }
 
+func (u DomainUserImpl) Update(userParam domainmodel.User)(domainmodel.User, error) {
+	entitiesUser := MapUserDomainToEntities(userParam)
+	_, err := u.userRepo.Update(entitiesUser)
+	if err != nil {
+		return userParam, err
+	}
+	return userParam, nil
+}
 
 func UserMap(entitiesUser entities.User) domainmodel.User {
 	domainUser := domainmodel.User{
@@ -62,4 +71,14 @@ func UserMap(entitiesUser entities.User) domainmodel.User {
 		Mobile: entitiesUser.Mobile,
 	}
 	return domainUser
+}
+
+func MapUserDomainToEntities(domainUser domainmodel.User) entities.User {
+	entitiesUser := entities.User{
+		Id: domainUser.Id,
+		Name: domainUser.Name,
+		Email: domainUser.Email,
+		Mobile: domainUser.Mobile,
+	}
+	return entitiesUser
 }
