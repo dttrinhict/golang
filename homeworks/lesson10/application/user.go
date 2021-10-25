@@ -12,6 +12,7 @@ type User struct {
 	Name       string   `json:"name"`
 	Email      string	`json:"email"`
 	Mobile     string	`json:"mobile"`
+	Clubs []*entities.Club `json:"clubs"`
 }
 
 type UserImpl struct {

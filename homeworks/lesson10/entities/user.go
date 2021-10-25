@@ -6,8 +6,8 @@ type User struct { //Tên Entity --> biên thành snake_case trong Postgresql
 	Name       string   `pg:"name" gorm:"name" json:"name"`//-> name, kiểu string --> text
 	Email      string	`pg:"email" gorm:"email" json:"email"`
 	Mobile     string	`pg:"mobile" gorm:"mobile" json:"mobile"`
+	Club	[]*Club `pg:"many2many:user_club" gorm:"many2many:user_club" json:"club"`
 	User_Role []User_Role
-	User_Club []User_Club
 }
 
 func (user *User) TableName() string  {

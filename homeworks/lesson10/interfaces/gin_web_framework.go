@@ -20,7 +20,7 @@ func (s *server) Run() {
 	}
 }
 
-func NewGinServer(user *handler.User, club *handler.Club) *gin.Engine{
+func NewGinServer(user *handler.User, club *handler.Club, userClub *handler.UserClub) *gin.Engine{
 	engine := gin.New()
 	userGroup := engine.Group("/user/")
 	{
@@ -35,6 +35,10 @@ func NewGinServer(user *handler.User, club *handler.Club) *gin.Engine{
 		clubGroup.GET("/get-clubs", club.GGetClubs)
 		clubGroup.GET("/get-club/:id", club.GGetClub)
 		clubGroup.PUT("/update-club", club.GUpdateClub)
+	}
+	userClubGroup := engine.Group("/user-club/")
+	{
+		userClubGroup.POST("/assign-user-to-club", userClub.GAssignUserToClub)
 	}
 
 	return engine

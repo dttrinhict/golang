@@ -82,3 +82,16 @@ func MapUserDomainToEntities(domainUser domainmodel.User) entities.User {
 	}
 	return entitiesUser
 }
+
+func MapUserEntitiesToDomain(entitiesUsers []entities.User) (domainUsers []domainmodel.User) {
+	for _, user := range entitiesUsers {
+		domainUser := domainmodel.User{
+			Id: user.Id,
+			Name: user.Name,
+			Email: user.Email,
+			Mobile: user.Mobile,
+		}
+		domainUsers = append(domainUsers, domainUser)
+	}
+	return domainUsers
+}

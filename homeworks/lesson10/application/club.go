@@ -3,12 +3,14 @@ package application
 import (
 	domainmodel "golang/homeworks/lesson10/domain/model"
 	domainservice "golang/homeworks/lesson10/domain/services"
+	"golang/homeworks/lesson10/entities"
 	"golang/homeworks/lesson10/util"
 )
 
 type Club struct {
 	Id         string   `json:"id"`
 	Name       string   `json:"name"`
+	Users []*entities.User `json:"users"`
 }
 
 type ClubImpl struct {
@@ -56,6 +58,15 @@ func MapClubDomainToApp(domainClub domainmodel.Club) Club  {
 	return Club{
 		Id: domainClub.Id,
 		Name: domainClub.Name,
+		Users: domainClub.Users,
+	}
+}
+
+func MapClubAppToDomain(club Club) domainmodel.Club  {
+	return domainmodel.Club{
+		Id: club.Id,
+		Name: club.Name,
+		Users: club.Users,
 	}
 }
 
