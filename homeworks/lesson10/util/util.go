@@ -1,11 +1,13 @@
 package util
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/go-pg/pg/v10"
 	"github.com/gofiber/fiber/v2"
 	gonanoid "github.com/matoous/go-nanoid/v2"
 	"golang/homeworks/lesson10/entities"
 	"math/rand"
+	"net/http"
 )
 
 /* Sinh mã unique cho primary key
@@ -79,4 +81,22 @@ func ResponseErr(c *fiber.Ctx, statusCode int, message string) (error){
 		"status":  statusCode,
 		"message": message,
 	})
+}
+
+func GResponseErr(c *gin.Context, statusCode int, message string){
+	c.JSON(
+		http.StatusBadRequest,
+		gin.H{
+			"status":  statusCode,
+			"message": message,
+		})
+}
+
+func GResponse(c *gin.Context, statusCode int, data interface{}){
+	c.JSON(
+		http.StatusBadRequest,
+		gin.H{
+			"status":  statusCode,
+			"data": data,
+		})
 }
