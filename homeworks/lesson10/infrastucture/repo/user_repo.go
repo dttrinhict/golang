@@ -1,6 +1,9 @@
 package repo
 
-import "golang/homeworks/lesson10/entities"
+import (
+	"golang/homeworks/lesson10/entities"
+	"golang/homeworks/lesson10/infrastucture/databases"
+)
 
 type UserRepo interface {
 	GetUers() (users []entities.User, err error)
@@ -8,4 +11,14 @@ type UserRepo interface {
 	Create(user entities.User) (entities.User, error)
 	Update(user entities.User) (entities.User, error)
 	Delete(user entities.User) (entities.User, error)
+}
+
+
+type UserPostgressRepoImpl struct {
+	PostgressDB *databases.PostgressDB
+}
+
+
+type UserMySQLRepoImpl struct {
+	gormDB *databases.MySQLDB
 }

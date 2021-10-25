@@ -73,3 +73,22 @@ CREATE TABLE `user_role` (
 
 DROP INDEX user_idx;
 CREATE UNIQUE INDEX `user_idx` ON `user_role` (`user_id`, `role_id`);
+
+
+DROP TABLE IF EXISTS `clubs`;
+CREATE TABLE `clubs` (
+                         `id` VARCHAR(40) NOT NULL,
+                         `name` VARCHAR(200) NOT NULL,
+                         PRIMARY KEY (`id`),
+                         UNIQUE INDEX `name_UNIQUE` (`name` ASC)
+);
+
+DROP TABLE IF EXISTS `user_club`;
+CREATE TABLE `user_club` (
+                             `user_id` VARCHAR(40) NOT NULL,
+                             `club_id` VARCHAR(40) NOT NULL,
+                             PRIMARY KEY (`user_id`, `club_id`)
+);
+
+DROP INDEX user_club_idx;
+CREATE UNIQUE INDEX `user_club_idx` ON `user_club` (`user_id`, `club_id`);
