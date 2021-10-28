@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
 	"golang/homeworks/lesson10/application"
 	"golang/homeworks/lesson10/util"
@@ -19,3 +20,20 @@ func (userClub *UserClub)GAssignUserToClub(c *gin.Context) {
 	}
 	util.GResponse(c, http.StatusCreated, users)
 }
+
+
+func (userClub *UserClub)GGetUsersOfClub(c *gin.Context) {
+	clubID := c.Param("id")
+	if clubID == "" {
+		util.GResponseErr(c, http.StatusBadRequest, errors.New("Club id is null").Error())
+	}
+	clubApp := application.Club{
+		Id: clubID,
+	}
+	users, err := userClub.UserClubApp.GetUsersOfClub(clubApp)
+	if err != nil {
+		util.GResponseErr(c, http.StatusNotFound, err.Error())
+	}
+	util.GResponse(c, http.StatusCreated, users)
+}
+

@@ -36,7 +36,12 @@ func (u UserClubImpl) AssignClubsToUser(user User) (clubs []Club, err error) {
 }
 
 func (u UserClubImpl) GetUsersOfClub(club Club) (users []User, err error) {
-	panic("implement me")
+	domainClub := MapClubAppToDomain(club)
+	 domainUsers, err := u.domainUserClubService.GetUsersOfClub(domainClub)
+	 if err!=nil {
+		 return nil, err
+	 }
+	 return MapUsersApp(domainUsers), nil
 }
 
 func (u UserClubImpl) GetClubsOfUser(user User) (clubs []Club, err error) {

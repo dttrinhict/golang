@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gin-gonic/gin"
 	"golang/homeworks/lesson10/interfaces/handler"
+	"golang/homeworks/lesson10/util/logger"
 	"log"
 	"net/http"
 )
@@ -12,6 +13,8 @@ import (
 type server struct {
 	httpServer *http.Server
 }
+
+var Logger logger.Logger
 
 func (s *server) Run() {
 	//shutdown.SigtermHandler().RegisterErrorFuncContext(context.Background(), s.httpServer.Shutdown)
@@ -39,6 +42,7 @@ func NewGinServer(user *handler.User, club *handler.Club, userClub *handler.User
 	userClubGroup := engine.Group("/user-club/")
 	{
 		userClubGroup.POST("/assign-user-to-club", userClub.GAssignUserToClub)
+		userClubGroup.GET("/get-users-of-club/:id", userClub.GGetUsersOfClub)
 	}
 
 	return engine

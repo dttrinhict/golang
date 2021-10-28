@@ -1,6 +1,7 @@
 package repo
 
 import (
+	"errors"
 	"golang/homeworks/lesson10/entities"
 	"golang/homeworks/lesson10/infrastucture/databases"
 )
@@ -17,7 +18,8 @@ func (c ClubMySQLRepoImpl) GetClubs() (clubs []entities.Club, err error) {
 }
 
 func (c ClubMySQLRepoImpl) GetClub(clubParam entities.Club) (club entities.Club, err error) {
-	panic("implement me")
+	err = c.gormDB.DB.Find(&club, "id=?", clubParam.Id).Error
+	return club, err
 }
 
 func (c ClubMySQLRepoImpl) Create(club entities.Club) (entities.Club, error) {
@@ -40,9 +42,26 @@ func (c ClubMySQLRepoImpl) Create(club entities.Club) (entities.Club, error) {
 }
 
 func (c ClubMySQLRepoImpl) Update(club entities.Club) (entities.Club, error) {
-	panic("implement me")
+	checkExsisted, err := c.CheckExsisted(club)
+	if err != nil {
+		return club, err
+	}
+	if !checkExsisted {
+		return club, errors.New("the club is not exsisted")
+	}
+	err = c.gormDB.DB.Save(&club).Error
+	return club, err
 }
 
 func (c ClubMySQLRepoImpl) Delete(club entities.Club) (entities.Club, error) {
 	panic("implement me")
+}
+
+
+func (c ClubMySQLRepoImpl)CheckExsisted(club entities.Club) (bool, error) {
+	clubResult, err := c.GetClub(club)
+	if err !=  nil || clubResult.Id == "" {
+		return false, errors.New("the club is not exsisted")
+	}
+	return true, nil
 }

@@ -4,7 +4,7 @@ type Club struct {
 	tableName  struct{} `pg:"golang.clubs"` //--> trỏ đến schema.table
 	Id         string   `pg:"id,pk" gorm:"Id,primaryKey" json:"id"`      //pk--> đây là primary key
 	Name       string   `pg:"name" gorm:"name" json:"name"`//-> name, kiểu string --> text
-	User	[]*User `pg:"many2many:user_club" gorm:"many2many:user_club" json:"user"`
+	Users	[]*User `pg:"many2many:user_club" gorm:"many2many:user_club" json:"user"`
 }
 
 func (club *Club) TableName() string  {

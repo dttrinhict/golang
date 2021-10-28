@@ -58,7 +58,7 @@ func MapClubDomainToEntities(domainClub domainmodel.Club) entities.Club {
 	return entities.Club{
 		Id: domainClub.Id,
 		Name: domainClub.Name,
-		User: domainClub.Users,
+		Users: domainClub.Users,
 	}
 }
 

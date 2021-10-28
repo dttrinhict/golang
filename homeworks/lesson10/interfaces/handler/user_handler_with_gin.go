@@ -4,19 +4,26 @@ import (
 	"github.com/gin-gonic/gin"
 	"golang/homeworks/lesson10/application"
 	"golang/homeworks/lesson10/util"
+	ilogger "golang/homeworks/lesson10/util/logger"
 	"net/http"
 )
 
 func (user *User)GUserCreate(c *gin.Context) {
+	logger := ilogger.NewLogger(ilogger.FactoryLogger{GinContext: c})
 	userApp := application.User{}
 	err := c.ShouldBindJSON(&userApp)
 	if err != nil {
 		util.GResponseErr(c, http.StatusBadRequest, err.Error())
+		logger.Log(err)
+		return
 	}
 	err = user.UserApp.UserCreate(userApp)
 	if err != nil {
-		util.GResponseErr(c, http.StatusNotFound, err.Error())
+		//util.GResponseErr(c, http.StatusNotFound, err.Error())
+		logger.Log(err)
+		return
 	}
+	logger.Info("Created", c.Request.RequestURI)
 	util.GResponse(c, http.StatusCreated, userApp)
 }
 

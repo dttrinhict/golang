@@ -27,7 +27,7 @@ func (d DomainUserClubImpl) AssignUserToClub(club domainmodel.Club) (users []dom
 	entitiesClub := MapClubDomainToEntities(club)
 	entitiesUsers, err := d.userClub.AssignUserToClub(entitiesClub)
 	if err != nil {return users, err}
-	return MapUserEntitiesToDomain(entitiesUsers), err
+	return MapUsersEntitiesToDomain(entitiesUsers), err
 }
 
 func (d DomainUserClubImpl) AssignClubsToUser(user domainmodel.User) (clubs []domainmodel.Club, err error) {
@@ -35,7 +35,9 @@ func (d DomainUserClubImpl) AssignClubsToUser(user domainmodel.User) (clubs []do
 }
 
 func (d DomainUserClubImpl) GetUsersOfClub(club domainmodel.Club) (users []domainmodel.User, err error) {
-	panic("implement me")
+	entitiesClub := MapClubDomainToEntities(club)
+	entitiesUsers, err := d.userClub.GetUsersOfClub(entitiesClub)
+	return MapUsersEntitiesToDomain1(entitiesUsers), err
 }
 
 func (d DomainUserClubImpl) GetClubsOfUser(user domainmodel.User) (clubs []domainmodel.Club, err error) {
