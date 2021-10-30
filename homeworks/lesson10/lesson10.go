@@ -19,6 +19,7 @@ func main()  {
 	user_mysql_repo := repo.User_MySQL_Repo(mysqldb)
 	club_mysql_repo := repo.Club_MySQL_Repo(mysqldb)
 	user_club_mysql := repo.User_Club_MySQL_Repo(mysqldb)
+	member_mysql_repo := repo.MemberMySQLRepo(mysqldb)
 	fmt.Println(user_Postgress_Repo)
 	domain_User := domainservices.DomainUser(user_mysql_repo) // user mysql to store data
 	user_App := application.User_App(domain_User)
@@ -32,12 +33,17 @@ func main()  {
 	user_club_App := application.User_Club_App(domain_user_club)
 	user_club := handler.NewUserClub(user_club_App)
 
+	domainMember := domainservices.DomainMember(member_mysql_repo) // user mysql to store data
+	memberApp := application.Member_App(domainMember)
+	member := handler.NewMember(memberApp)
+
+
 	// Run with fiber web engine
 	//app := interfaces.NewRouter(user)
 	//app.Listen(":8080")
 
 	// Run with gin web engine
-	app := interfaces.NewGinServer(user, club, user_club)
+	app := interfaces.NewGinServer(user, club, user_club,member)
 	app.Run(":8080")
 
 }

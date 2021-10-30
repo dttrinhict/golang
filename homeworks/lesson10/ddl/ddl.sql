@@ -48,6 +48,18 @@ CREATE TABLE `users` (
                          UNIQUE INDEX `mobile_UNIQUE` (`mobile` ASC)
 );
 
+
+DROP TABLE IF EXISTS `members`;
+CREATE TABLE `members` (
+                         `id` VARCHAR(40) NOT NULL,
+                         `name` VARCHAR(200) NOT NULL,
+                         `email` VARCHAR(200) NOT NULL,
+                         `mobile` VARCHAR(20) NOT NULL,
+                         PRIMARY KEY (`id`),
+                         UNIQUE INDEX `email_UNIQUE` (`email` ASC),
+                         UNIQUE INDEX `mobile_UNIQUE` (`mobile` ASC)
+);
+
 DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
                          `id` INT NOT NULL,
@@ -92,3 +104,13 @@ CREATE TABLE `user_club` (
 
 DROP INDEX user_club_idx;
 CREATE UNIQUE INDEX `user_club_idx` ON `user_club` (`user_id`, `club_id`);
+
+DROP TABLE IF EXISTS `member_club`;
+CREATE TABLE `member_club` (
+                             `member_id` VARCHAR(40) NOT NULL,
+                             `club_id` VARCHAR(40) NOT NULL,
+                             PRIMARY KEY (`member_id`, `club_id`)
+);
+
+DROP INDEX member_club_idx;
+CREATE UNIQUE INDEX `member_club_idx` ON `member_club` (`member_id`, `club_id`);

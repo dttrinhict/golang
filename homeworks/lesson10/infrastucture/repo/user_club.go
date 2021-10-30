@@ -17,7 +17,7 @@ type UserClubMySQLImpl struct {
 	mySQLDB *databases.MySQLDB
 }
 
-type ClubPostgressImpl struct {
+type UserClubPostgressImpl struct {
 	postgressDB *databases.PostgressDB
 }
 
