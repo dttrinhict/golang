@@ -8,11 +8,19 @@ import (
 	"golang/homeworks/lesson10/infrastucture/repo"
 	"golang/homeworks/lesson10/interfaces"
 	"golang/homeworks/lesson10/interfaces/handler"
+	"golang/homeworks/lesson10/util/configs"
+	"log"
 )
 
 func main()  {
+
+	config, err := configs.LoadConfig("./homeworks/lesson10/envconfig/")
+	if err != nil {
+		log.Printf(err.Error())
+	}
+
 	pgdb := databases.PgDBIntance()
-	mysqldb := databases.MySQLDBIntance()
+	mysqldb := databases.MySQLDBIntance(config)
 
 	user_Postgress_Repo := repo.User_Postgress_Repo(pgdb)
 	//domain_User := domainservices.DomainUser(user_Postgress_Repo) // user postgress to store data
@@ -44,6 +52,6 @@ func main()  {
 
 	// Run with gin web engine
 	app := interfaces.NewGinServer(user, club, user_club,member)
-	app.Run(":8080")
+	app.Run(config.ServerAddress)
 
 }

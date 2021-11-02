@@ -2,6 +2,7 @@ package databases
 
 import (
 	"errors"
+	"golang/homeworks/lesson10/util/configs"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"math/rand"
@@ -15,10 +16,10 @@ type MySQLDB struct {
 
 var mysqlInstance *MySQLDB
 
-func MySQLDBIntance() *MySQLDB  {
+func MySQLDBIntance(config *configs.Config) *MySQLDB  {
 	if mysqlInstance == nil {
 		db, err := gorm.Open(mysql.New(mysql.Config{
-			DSN: "hydraops:a#123456Bc@tcp(127.0.0.1:3306)/golang?charset=utf8&parseTime=True&loc=Local", // data source name
+			DSN: config.DBSource, // data source name
 			DefaultStringSize: 256, // default size for string fields
 			DisableDatetimePrecision: true, // disable datetime precision, which not supported before MySQL 5.6
 			DontSupportRenameIndex: true, // drop & create when rename index, rename index not supported before MySQL 5.7, MariaDB
