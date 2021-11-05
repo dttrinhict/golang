@@ -1,9 +1,8 @@
 package storages
 
 import (
-	"context"
 	"fmt"
-	"google.golang.org/api/option"
+	"golang.org/x/net/context"
 	"io/ioutil"
 	"os"
 	"time"
@@ -22,7 +21,8 @@ var Gcs *GCS
 func GCSInit(credentials, projectID string) (*GCS, error) {
 	if Gcs == nil {
 		ctx := context.Background()
-		client, err := storage.NewClient(ctx, option.WithCredentialsFile(credentials))
+		//client, err := storage.NewClient(ctx, option.WithCredentialsFile(credentials))
+		client, err := storage.NewClient(ctx)
 		//client, err := storage.NewClient(ctx, option.ImpersonateCredentials())
 		if err != nil {
 			return nil, err

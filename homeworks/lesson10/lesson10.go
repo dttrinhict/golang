@@ -47,11 +47,11 @@ func main()  {
 
 
 	// Run with fiber web engine
-	//app := interfaces.NewRouter(user)
-	//app.Listen(":8080")
+	app := interfaces.NewRouter(user, club, user_club, member)
+	app.Listen(config.ServerAddress)
 
 	// Run with gin web engine
-	app := interfaces.NewGinServer(user, club, user_club,member)
-	app.Run(config.ServerAddress)
+	//app := interfaces.NewGinServer(user, club, user_club,member)
+	//app.Run(config.ServerAddress)
 
 }

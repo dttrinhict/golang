@@ -7,6 +7,7 @@ import (
 	"github.com/TechMaster/eris"
 	"github.com/gin-gonic/gin"
 	"github.com/kataras/iris/v12"
+	"log"
 	"net/http"
 	"syscall"
 )
@@ -14,7 +15,7 @@ import (
 
 type Logger interface {
 	Log(err error)
-	Info(msg string, redirectLink ...string)
+	Info(msg string, data interface{}, redirectLink ...string)
 }
 
 var Log Logger
@@ -87,9 +88,11 @@ func (g GinLogger) Log(err error) {
 	}
 }
 
-func (g GinLogger) Info(msg string, redirectLink ...string) {
-	g.GinCtx.JSON(http.StatusInternalServerError, gin.H{
-		"ErrorMsg": msg,
+func (g GinLogger) Info(msg string, data interface{} , redirectLink ...string) {
+	log.Printf("%v", map[string]interface{}{
+		"Client": g.GinCtx.ClientIP(),
+		"Message": msg,
+		"Data": data,
 		"Uri": redirectLink,
 	})
 }
@@ -168,7 +171,7 @@ func (i IrisLogger) Log(err error) {
 	}
 }
 
-func (i IrisLogger) Info(msg string, redirectLink ...string) {
+func (i IrisLogger) Info(msg string, data interface{}, redirectLink ...string) {
 	switch len(redirectLink) {
 	case 2:
 		_ = i.irisCtx.View(LogConf.InfoTemplate, iris.Map{

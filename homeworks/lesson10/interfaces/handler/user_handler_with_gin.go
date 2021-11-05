@@ -23,16 +23,19 @@ func (user *User)GUserCreate(c *gin.Context) {
 		logger.Log(err)
 		return
 	}
-	logger.Info("Created", c.Request.RequestURI)
+	logger.Info("Created", userApp, c.Request.RequestURI)
 	util.GResponse(c, http.StatusCreated, userApp)
 }
 
 
 func (user *User)GGetUsers(c *gin.Context)  {
+	logger := ilogger.NewLogger(ilogger.FactoryLogger{GinContext: c})
 	userApp, err := user.UserApp.GetUsers()
 	if err != nil {
+		logger.Log(err)
 		util.GResponseErr(c, http.StatusBadRequest, err.Error())
 	}
+	logger.Info("Get users",userApp, c.Request.RequestURI)
 	util.GResponse(c, http.StatusOK, userApp)
 }
 
@@ -48,6 +51,7 @@ func (user *User)GGetUser(c *gin.Context) {
 	if err != nil {
 		util.GResponseErr(c, http.StatusBadRequest, err.Error())
 	}
+
 	util.GResponse(c, http.StatusOK, userApp)
 }
 

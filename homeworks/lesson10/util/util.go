@@ -94,9 +94,16 @@ func GResponseErr(c *gin.Context, statusCode int, message string){
 
 func GResponse(c *gin.Context, statusCode int, data interface{}){
 	c.JSON(
-		http.StatusBadRequest,
+		statusCode,
 		gin.H{
 			"status":  statusCode,
 			"data": data,
 		})
+}
+
+func FResponse(f *fiber.Ctx, statusCode int, data interface{}) error {
+	return f.JSON(fiber.Map{
+		"status": statusCode,
+		"data":   data,
+	})
 }
