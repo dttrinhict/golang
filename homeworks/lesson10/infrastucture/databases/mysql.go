@@ -3,6 +3,7 @@ package databases
 import (
 	"errors"
 	"golang/homeworks/lesson10/util/configs"
+	"golang/homeworks/lesson10/util/logger/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"math/rand"
@@ -18,6 +19,7 @@ var mysqlInstance *MySQLDB
 
 func MySQLDBIntance(config *configs.Config) *MySQLDB  {
 	if mysqlInstance == nil {
+		logger := zap.LoggerMysql()
 		db, err := gorm.Open(mysql.New(mysql.Config{
 			DSN: config.DBSource, // data source name
 			DefaultStringSize: 256, // default size for string fields
@@ -27,14 +29,17 @@ func MySQLDBIntance(config *configs.Config) *MySQLDB  {
 			SkipInitializeWithVersion: false, // auto configure based on currently MySQL version
 		}), &gorm.Config{})
 		if err != nil {
+			logger.Error(err.Error())
 			panic(err)
 		}
 		if db == nil {
 			err = errors.New("Gorm return nil pointer")
+			logger.Error(err.Error())
 			panic(err)
 		}else{
 			sqlDB, err := db.DB()
 			if err != nil {
+				logger.Error(err.Error())
 				panic(err)
 			}
 			sqlDB.SetMaxIdleConns(100)

@@ -9,33 +9,35 @@ import (
 )
 
 func (user *User)GUserCreate(c *gin.Context) {
-	logger := ilogger.NewLogger(ilogger.FactoryLogger{GinContext: c})
+	//logger := ilogger.NewLogger(ilogger.FactoryLogger{GinContext: c})
+	logger := ilogger.NewFactoryZapLogger(ilogger.FactoryLogger{GinContext: c})
 	userApp := application.User{}
 	err := c.ShouldBindJSON(&userApp)
 	if err != nil {
 		util.GResponseErr(c, http.StatusBadRequest, err.Error())
-		logger.Log(err)
+		logger.Error(err.Error())
 		return
 	}
 	err = user.UserApp.UserCreate(userApp)
 	if err != nil {
-		//util.GResponseErr(c, http.StatusNotFound, err.Error())
-		logger.Log(err)
+		util.GResponseErr(c, http.StatusConflict, err.Error())
+		logger.Error(err.Error())
 		return
 	}
-	logger.Info("Created", userApp, c.Request.RequestURI)
+	logger.Info("Created")
 	util.GResponse(c, http.StatusCreated, userApp)
 }
 
 
 func (user *User)GGetUsers(c *gin.Context)  {
-	logger := ilogger.NewLogger(ilogger.FactoryLogger{GinContext: c})
+	//logger := ilogger.NewLogger(ilogger.FactoryLogger{GinContext: c})
+	logger := ilogger.NewFactoryZapLogger(ilogger.FactoryLogger{GinContext: c})
 	userApp, err := user.UserApp.GetUsers()
 	if err != nil {
-		logger.Log(err)
+		logger.Error(err.Error())
 		util.GResponseErr(c, http.StatusBadRequest, err.Error())
 	}
-	logger.Info("Get users",userApp, c.Request.RequestURI)
+	logger.Info("Get users")
 	util.GResponse(c, http.StatusOK, userApp)
 }
 
