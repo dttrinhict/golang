@@ -5,14 +5,15 @@ import (
 	"golang/homeworks/lesson10/interfaces/handler"
 )
 
-func NewRouter(user *handler.User, club *handler.Club, userClub *handler.UserClub, member *handler.Member) *fiber.App {
+func NewRouter(user *handler.User, club *handler.Club, userRole *handler.UserRole, member *handler.Member) *fiber.App {
 	app := fiber.New()
 	userGroup := app.Group("/user/")
 	{
 		userGroup.Post("/create", user.UserCreate)
 		userGroup.Get("/get-users", user.GetUsers)
 		userGroup.Get("/get-user/:id", user.GetUser)
-		userGroup.Put("/update-user", user.UpdateUser)
+		userGroup.Put("/update-user/:id", user.UpdateUser)
+		userGroup.Delete("/delete-user/:id", user.UDeleteUser)
 	}
 	return app
 }

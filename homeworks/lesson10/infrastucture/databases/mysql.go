@@ -4,6 +4,7 @@ import (
 	"errors"
 	"golang/homeworks/lesson10/util/configs"
 	"golang/homeworks/lesson10/util/logger/zap"
+	gormlogger "gorm.io/gorm/logger"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"math/rand"
@@ -27,7 +28,9 @@ func MySQLDBIntance(config *configs.Config) *MySQLDB  {
 			DontSupportRenameIndex: true, // drop & create when rename index, rename index not supported before MySQL 5.7, MariaDB
 			DontSupportRenameColumn: true, // `change` when rename column, rename column not supported before MySQL 8, MariaDB
 			SkipInitializeWithVersion: false, // auto configure based on currently MySQL version
-		}), &gorm.Config{})
+		}), &gorm.Config{
+			Logger: gormlogger.Default.LogMode(gormlogger.Error), //https://gorm.io/docs/logger.html#Log-Levels GORM defined log levels: Silent, Error, Warn, Info
+		})
 		if err != nil {
 			logger.Error(err.Error())
 			panic(err)

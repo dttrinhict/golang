@@ -28,7 +28,10 @@ func NewLogger(factory_logger FactoryLogger) Logger {
 
 func NewFactoryZapLogger(factory_logger FactoryLogger) zap.Logger {
 	if factory_logger.GinContext != nil {
-		return zap.ULoggerGin(factory_logger.GinContext)
+		return zap.NewGinLogger(factory_logger.GinContext)
+	}
+	if factory_logger.FiberContext != nil {
+		return zap.NewFiberLogger(factory_logger.FiberContext)
 	}
 	return nil
 }

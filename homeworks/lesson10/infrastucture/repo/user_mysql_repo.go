@@ -45,12 +45,12 @@ func (u *UserMySQLRepoImpl) Create(user entities.User) (entities.User, error) {
 func (u *UserMySQLRepoImpl) Update(user entities.User) (entities.User, error) {
 	_, err := u.GetUser(user)
 	if err !=  nil {
-		return user, errors.New("Có lỗi thì get user")
+		return user, errors.New("Có lỗi khi get user")
 	}
 	err = u.gormDB.DB.Save(&user).Error
 	return user, err
 }
 
-func (u *UserMySQLRepoImpl) Delete(user entities.User) (entities.User, error) {
+func (u *UserMySQLRepoImpl) Delete(user entities.User) (users []entities.User, err error) {
 	panic("implement me")
 }

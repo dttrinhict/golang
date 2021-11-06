@@ -8,13 +8,13 @@ import (
 	"net/http"
 )
 
-func (userClub *UserClub)GAssignUserToClub(c *gin.Context) {
-	clubApp := application.Club{}
-	err := c.ShouldBindJSON(&clubApp)
+func (userRole *UserRole)GAssignUserToRole(c *gin.Context) {
+	roleApp := application.Role{}
+	err := c.ShouldBindJSON(&roleApp)
 	if err != nil {
 		util.GResponseErr(c, http.StatusBadRequest, err.Error())
 	}
-	users, err := userClub.UserClubApp.AssignUserToClub(clubApp)
+	users, err := userRole.UserRoleApp.AssignUserToRole(roleApp)
 	if err != nil {
 		util.GResponseErr(c, http.StatusNotFound, err.Error())
 	}
@@ -22,15 +22,15 @@ func (userClub *UserClub)GAssignUserToClub(c *gin.Context) {
 }
 
 
-func (userClub *UserClub)GGetUsersOfClub(c *gin.Context) {
+func (userRole *UserRole)GGetUsersOfRole(c *gin.Context) {
 	clubID := c.Param("id")
 	if clubID == "" {
-		util.GResponseErr(c, http.StatusBadRequest, errors.New("Club id is null").Error())
+		util.GResponseErr(c, http.StatusBadRequest, errors.New("Role id is null").Error())
 	}
-	clubApp := application.Club{
+	roleApp := application.Role{
 		Id: clubID,
 	}
-	users, err := userClub.UserClubApp.GetUsersOfClub(clubApp)
+	users, err := userRole.UserRoleApp.GetUsersOfRole(roleApp)
 	if err != nil {
 		util.GResponseErr(c, http.StatusNotFound, err.Error())
 	}

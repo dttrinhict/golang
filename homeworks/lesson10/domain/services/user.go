@@ -11,10 +11,11 @@ type DomainUserImpl struct {
 }
 
 type DomainUserService interface {
-	Create(user domainmodel.User) (err error)
+	Create(user domainmodel.User) (domainUser domainmodel.User, err error)
 	GetUser(userParam entities.User)(user domainmodel.User, err error)
 	GetUsers()(users []domainmodel.User, err error)
 	Update(userParam domainmodel.User)(domainmodel.User, error)
+	DeleteUser(userParam entities.User) (users []domainmodel.User, err error)
 }
 
 func DomainUser(userRepo repo.UserRepo) DomainUserService {
@@ -24,15 +25,16 @@ func DomainUser(userRepo repo.UserRepo) DomainUserService {
 }
 
 
-func (u DomainUserImpl) Create(user domainmodel.User) (err error) {
+func (u DomainUserImpl) Create(user domainmodel.User) (domainUser domainmodel.User, err error) {
 	userStorePostgress := entities.User{
 		Id:         user.Id,
 		Name:       user.Name,
 		Email:      user.Email,
 		Mobile:     user.Mobile,
 	}
-	_,err = u.userRepo.Create(userStorePostgress)
-	return err
+	entitiesUser ,err := u.userRepo.Create(userStorePostgress)
+	domainUser = MapUserEntitiesToDomain(entitiesUser)
+	return domainUser, err
 }
 
 func (u DomainUserImpl) GetUser(userParam entities.User) (user domainmodel.User, err error) {
@@ -56,11 +58,20 @@ func (u DomainUserImpl) GetUsers() (users []domainmodel.User, err error) {
 
 func (u DomainUserImpl) Update(userParam domainmodel.User)(domainmodel.User, error) {
 	entitiesUser := MapUserDomainToEntities(userParam)
-	_, err := u.userRepo.Update(entitiesUser)
+	entitiesUser, err := u.userRepo.Update(entitiesUser)
 	if err != nil {
 		return userParam, err
 	}
+	userParam = MapUserEntitiesToDomain(entitiesUser)
 	return userParam, nil
+}
+
+func (u DomainUserImpl) DeleteUser(userParam entities.User) (users []domainmodel.User, err error) {
+	entitiesUsers, err := u.userRepo.Delete(userParam)
+	if err != nil {
+		return nil, err
+	}
+	return MapUsersEntitiesToDomain(entitiesUsers), err
 }
 
 func UserMap(entitiesUser entities.User) domainmodel.User {
@@ -81,6 +92,16 @@ func MapUserDomainToEntities(domainUser domainmodel.User) entities.User {
 		Mobile: domainUser.Mobile,
 	}
 	return entitiesUser
+}
+
+func MapUserEntitiesToDomain(entitiesUser entities.User) (domainUsers domainmodel.User) {
+		domainUser := domainmodel.User{
+			Id: entitiesUser.Id,
+			Name: entitiesUser.Name,
+			Email: entitiesUser.Email,
+			Mobile: entitiesUser.Mobile,
+		}
+	return domainUser
 }
 
 func MapUsersEntitiesToDomain(entitiesUsers []entities.User) (domainUsers []domainmodel.User) {

@@ -14,7 +14,7 @@ import (
 
 func main()  {
 
-	config, err := configs.LoadConfig("./homeworks/lesson10/envconfig/")
+	config, err := configs.LoadConfig("./envconfig/")
 	if err != nil {
 		log.Printf(err.Error())
 	}
@@ -26,10 +26,13 @@ func main()  {
 	//domain_User := domainservices.DomainUser(user_Postgress_Repo) // user postgress to store data
 	user_mysql_repo := repo.User_MySQL_Repo(mysqldb)
 	club_mysql_repo := repo.Club_MySQL_Repo(mysqldb)
-	user_club_mysql := repo.User_Club_MySQL_Repo(mysqldb)
+	user_role_mysql := repo.User_Role_MySQL_Repo(mysqldb)
+	user_role_postgress := repo.User_Role_Postgress_Repo(pgdb)
 	member_mysql_repo := repo.MemberMySQLRepo(mysqldb)
 	fmt.Println(user_Postgress_Repo)
-	domain_User := domainservices.DomainUser(user_mysql_repo) // user mysql to store data
+	fmt.Println(user_mysql_repo)
+	fmt.Println(user_role_mysql)
+	domain_User := domainservices.DomainUser(user_Postgress_Repo) // user "user_Postgress_Repo" for postgress and "user_mysql_repo" for mysql to store data
 	user_App := application.User_App(domain_User)
 	user := handler.NewUser(user_App)
 
@@ -37,8 +40,8 @@ func main()  {
 	club_App := application.Club_App(domain_club)
 	club := handler.NewClub(club_App)
 
-	domain_user_club := domainservices.DomainUserClub(user_club_mysql) // user mysql to store data
-	user_club_App := application.User_Club_App(domain_user_club)
+	domain_user_role := domainservices.DomainUserClub(user_role_postgress) // user "user_club_mysql" for mysql and "" for postgres to store data
+	user_club_App := application.User_Club_App(domain_user_role)
 	user_club := handler.NewUserClub(user_club_App)
 
 	domainMember := domainservices.DomainMember(member_mysql_repo) // user mysql to store data
@@ -47,11 +50,11 @@ func main()  {
 
 
 	// Run with fiber web engine
-	//app := interfaces.NewRouter(user, club, user_club, member)
-	//app.Listen(config.ServerAddress)
+	app := interfaces.NewRouter(user, club, user_club, member)
+	app.Listen(config.ServerAddress)
 
 	// Run with gin web engine
-	app := interfaces.NewGinServer(user, club, user_club,member)
-	app.Run(config.ServerAddress)
+	//app := interfaces.NewGinServer(user, club, user_club,member)
+	//app.Run(config.ServerAddress)
 
 }

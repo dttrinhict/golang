@@ -54,14 +54,6 @@ func MapClubEntitiesToDomain(entitiesClub entities.Club) domainmodel.Club {
 	}
 }
 
-func MapClubDomainToEntities(domainClub domainmodel.Club) entities.Club {
-	return entities.Club{
-		Id: domainClub.Id,
-		Name: domainClub.Name,
-		Users: domainClub.Users,
-	}
-}
-
 func MapClubsEntitiesToDomain(entitiesClubs []entities.Club) (domainClubs []domainmodel.Club) {
 	for _, entitiesClub := range entitiesClubs {
 		domainClubs = append(domainClubs, MapClubEntitiesToDomain(entitiesClub))

@@ -13,7 +13,7 @@ type Ginlogger struct {
 	Ctx *gin.Context
 }
 
-func ULoggerGin(Ctx *gin.Context) Logger {
+func NewGinLogger(Ctx *gin.Context) Logger {
 	if logger == nil {
 		zaplog, err := zap.NewProduction()
 		if err != nil {

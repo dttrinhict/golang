@@ -34,7 +34,6 @@ func (u *UserPostgressRepoImpl) Create(user entities.User) (entities.User, error
 	if !util.Check_err(err, transaction) {
 		return user, err
 	}
-
 	//for _, role := range user.Int_roles {
 	//	user_role := entities.User_Role{
 	//		User_id: user.Id,
@@ -53,9 +52,14 @@ func (u *UserPostgressRepoImpl) Create(user entities.User) (entities.User, error
 }
 
 func (u *UserPostgressRepoImpl) Update(user entities.User) (entities.User, error) {
-	panic("implement me")
+	_, err := u.PostgressDB.DB.Model(&user).WherePK().Update()
+	return user, err
 }
 
-func (u *UserPostgressRepoImpl) Delete(user entities.User) (entities.User, error) {
-	panic("implement me")
+func (u *UserPostgressRepoImpl) Delete(user entities.User) (users []entities.User, err error) {
+	_, err = u.PostgressDB.DB.Model(&user).WherePK().Delete()
+	if err != nil {
+		return nil, err
+	}
+	return u.GetUers()
 }

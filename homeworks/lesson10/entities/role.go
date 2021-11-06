@@ -2,9 +2,9 @@ package entities
 
 type Role struct {
 	tableName  struct{} `pg:"golang.role"`
-	Id int `pg:"id,pk" gorm:"Id,primaryKey" json:"id"`
+	Id string `pg:"id,pk" gorm:"Id,primaryKey" json:"id"`
 	Name string `pg:"name" gorm:"name" json:"name"`
-	User_Role []User_Role
+	Users []*User `pg:"many2many:golang.user_role" gorm:"many2many:user_role" json:"users"`
 }
 
 func (role *Role) TableName() string  {

@@ -18,14 +18,14 @@ func (user *User)GUserCreate(c *gin.Context) {
 		logger.Error(err.Error())
 		return
 	}
-	err = user.UserApp.UserCreate(userApp)
+	userResult, err := user.UserApp.UserCreate(userApp)
 	if err != nil {
 		util.GResponseErr(c, http.StatusConflict, err.Error())
 		logger.Error(err.Error())
 		return
 	}
 	logger.Info("Created")
-	util.GResponse(c, http.StatusCreated, userApp)
+	util.GResponse(c, http.StatusCreated, userResult)
 }
 
 

@@ -21,10 +21,11 @@ type UserImpl struct {
 
 
 type UserApp interface {
-	UserCreate(user User) (err error)
+	UserCreate(user User) (appUser User, err error)
 	GetUser(user User) (users User, err error)
 	GetUsers() (users []User, err error)
 	Update(user User)(User, error)
+	DeleteUser(user User) (users []User, err error)
 }
 
 func User_App(domainUserService domainservice.DomainUserService) UserApp {
@@ -33,14 +34,16 @@ func User_App(domainUserService domainservice.DomainUserService) UserApp {
 	}
 }
 
-func (u UserImpl) UserCreate(user User) (err error) {
+func (u UserImpl) UserCreate(user User) (appUser User,err error) {
 	domainUser := domainmodel.User{
 		Id: util.NewID(),
 		Name: user.Name,
 		Email: user.Email,
 		Mobile: user.Mobile,
 	}
-	return u.domainUserService.Create(domainUser)
+	domainUser, err = u.domainUserService.Create(domainUser)
+	appUser = MapUserApp(domainUser)
+	return appUser, err
 }
 
 func (u UserImpl) GetUsers() (users []User, err error)  {
@@ -62,9 +65,20 @@ func (u UserImpl) GetUser(user User) (users User, err error) {
 
 func (u UserImpl) Update(user User)(User, error)  {
 	domainUser := MapUserAppToUserDomain(user)
-	_, err := u.domainUserService.Update(domainUser)
+	domainUser, err := u.domainUserService.Update(domainUser)
+	user = MapUserApp(domainUser)
 	return user, err
 }
+
+func (u UserImpl) DeleteUser(user User) (users []User, err error) {
+	entitiesUser := MapUserAppToUserEntities(user)
+	domainUsers, err := u.domainUserService.DeleteUser(entitiesUser)
+	if err != nil {
+		return nil, err
+	}
+	return MapUsersApp(domainUsers), nil
+}
+
 
 func MapUserApp(domainUser domainmodel.User) User  {
 	user := User{

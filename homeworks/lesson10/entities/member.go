@@ -8,7 +8,7 @@ type Member struct { //Tên Entity --> biên thành snake_case trong Postgresql
 	Name       string   `pg:"name" gorm:"name" json:"name"`//-> name, kiểu string --> text
 	Email      string	`pg:"email" gorm:"email" json:"email"`
 	Mobile     string	`pg:"mobile" gorm:"mobile" json:"mobile"`
-	Clubs	[]*Club `pg:"many2many:member_club" gorm:"many2many:member_club" json:"club"`
+	Clubs	[]*Club `pg:"many2many:golang.member_club" gorm:"many2many:member_club" json:"club"`
 }
 
 func (member *Member) TableName() string  {

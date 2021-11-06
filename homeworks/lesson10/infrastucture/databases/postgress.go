@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-pg/pg/v10"
+	"github.com/go-pg/pg/v10/orm"
+	"golang/homeworks/lesson10/entities"
 	"math/rand"
 	"time"
 )
@@ -28,6 +30,8 @@ func PgDBIntance() *PostgressDB {
 			Password: "abc123",
 			//Database: "golang",
 		})
+		//Đăng ký bảng quan hệ nhiều - nhiều
+		orm.RegisterTable(&entities.User_Role{})
 		//if err := DB.Ping(context.Background()); err != nil {
 		//	panic(err)
 		//}
