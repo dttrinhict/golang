@@ -52,5 +52,9 @@ func (u *UserMySQLRepoImpl) Update(user entities.User) (entities.User, error) {
 }
 
 func (u *UserMySQLRepoImpl) Delete(user entities.User) (users []entities.User, err error) {
-	panic("implement me")
+	err = u.gormDB.DB.Where("id=?",user.Id).Or("name=?",user.Name).Delete(&user).Error
+	if err != nil {
+		return users, err
+	}
+	return u.GetUers()
 }
