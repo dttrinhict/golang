@@ -1,8 +1,10 @@
 package repo
 
 import (
+	"errors"
 	"golang/homeworks/lesson12/entities"
 	"golang/homeworks/lesson12/infrastucture/databases"
+	"strings"
 )
 
 type MemberClub interface {
@@ -11,6 +13,7 @@ type MemberClub interface {
 	GetMembersOfClub(club entities.Club) (members []entities.Member, err error)
 	GetClubsOfMember(member entities.Member) (clubs []entities.Club, err error)
 	RemoveMembersFromClub(club entities.Club, membersParam []entities.Member) (members []entities.Member, err error)
+	Count(object string) (interface{}, error)
 }
 
 type MemberClubMySQLImpl struct {
@@ -104,4 +107,38 @@ func (m MemberClubMySQLImpl) RemoveMembersFromClub(club entities.Club, membersPa
 		return nil, err
 	}
 	return m.GetMembersOfClub(club)
+}
+
+func (m MemberClubMySQLImpl) Count(object string) (interface{}, error) {
+	if strings.Compare(object, "members-of-clubs") == 0 {
+		return m.CountMembersOfClubs()
+	}
+	if strings.Compare(object, "clubs-of-members") == 0 {
+		return m.CountClubsOfMembers()
+	}
+	return nil, errors.New("Wrong input data")
+}
+
+func (m MemberClubMySQLImpl) CountMembersOfClubs() (interface{}, error) {
+	var queryResult []struct {
+		Name          string
+		NumberMembers int
+	}
+	err := m.mySQLDB.DB.Raw("SELECT `clubs`.`name` as Name, COUNT(`members`.`id`) as NumberMembers FROM ((`member_club` INNER JOIN `clubs` ON `member_club`.`club_id` = `clubs`.`id`) INNER JOIN `members` ON `member_club`.`member_id` = `members`.`id`) GROUP BY name").Scan(&queryResult).Error
+	if err != nil {
+		return nil, err
+	}
+	return queryResult, nil
+}
+
+func (m MemberClubMySQLImpl) CountClubsOfMembers() (interface{}, error) {
+	var queryResult []struct {
+		Name          string
+		NumberClubs int
+	}
+	err := m.mySQLDB.DB.Raw("SELECT `members`.`name` as Name, COUNT(`clubs`.`id`) as NumberClubs FROM ((`member_club` INNER JOIN `clubs` ON `member_club`.`club_id` = `clubs`.`id`) INNER JOIN `members` ON `member_club`.`member_id` = `members`.`id`) GROUP BY name").Scan(&queryResult).Error
+	if err != nil {
+		return nil, err
+	}
+	return queryResult, nil
 }

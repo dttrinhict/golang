@@ -49,3 +49,20 @@ func (memberClub *MemberClub)GGetMembersOfClub(c *gin.Context) {
 	logger.Info("Updated")
 	util.GResponse(c, STATUSOK, membersApp)
 }
+
+func (memberClub *MemberClub)GCount(c *gin.Context) {
+	logger := ilogger.NewFactoryZapLogger(ilogger.FactoryLogger{GinContext: c})
+	object, ok := c.Params.Get("object")
+	if !ok {
+		util.GResponseErr(c, STATUSBEDREQUEST, errors.New("Cloud not get the param").Error())
+		logger.Error(errors.New("Cloud not get the param").Error())
+		return
+	}
+	countMembersOfClubs, err := memberClub.MemberClubApp.Count(object)
+	if err != nil {
+		util.GResponseErr(c, STATUSBEDREQUEST, err.Error())
+		logger.Error(err.Error())
+	}
+	logger.Info(object)
+	util.GResponse(c, STATUSOK, countMembersOfClubs)
+}

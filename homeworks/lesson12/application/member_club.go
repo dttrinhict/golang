@@ -14,6 +14,7 @@ type MemberClubApp interface {
 	GetMembersOfClub(club Club) (members []Member, err error)
 	GetClubsOfMember(member Member) (clubs []Club, err error)
 	RemoveMemberFromClub(club Club) (members []Member, err error)
+	Count(object string) (interface{}, error)
 }
 
 func Member_Club_App(domainMemberClubService domainservice.DomainMemberClubService) MemberClubApp {
@@ -51,4 +52,8 @@ func (m MemberClubImpl) GetClubsOfMember(member Member) (clubs []Club, err error
 
 func (m MemberClubImpl) RemoveMemberFromClub(club Club) (members []Member, err error) {
 	panic("implement me")
+}
+
+func (m MemberClubImpl) Count(object string) (interface{}, error) {
+	return m.domainMemberClubService.Count(object)
 }

@@ -15,6 +15,7 @@ type DomainMemberClubService interface {
 	GetMemberOfClub(club domainmodel.Club) (members []domainmodel.Member, err error)
 	GetClubsOfMember(member domainmodel.Member) (clubs []domainmodel.Club, err error)
 	RemoveMemberFromClub(club domainmodel.Club, membersParam []domainmodel.Member) (members []domainmodel.Member, err error)
+	Count(object string) (interface{}, error)
 }
 
 func DomainMemberClub(memberClub repo.MemberClub) DomainMemberClubService {
@@ -61,4 +62,8 @@ func (d DomainMemberClubImpl) RemoveMemberFromClub(club domainmodel.Club, member
 		return members, err
 	}
 	return MapMembersEntitiesToDomain(entitiesMembers), err
+}
+
+func (d DomainMemberClubImpl) Count(object string) (interface{}, error) {
+	return d.memberClub.Count(object)
 }

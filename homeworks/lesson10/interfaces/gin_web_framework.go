@@ -57,8 +57,8 @@ func NewGinServer(user *handler.User, club *handler.Club, userRole *handler.User
 	download := engine.Group("/download/")
 	{
 		download.GET("/", func(c *gin.Context) {
-			projectID := "vinid-playground"
-			gcs, err := storages.GCSInit("/Users/trinhdt2/learn/golang-techmaster/golang/homeworks/lesson10/util/storages/vinid-playground-5afeaf8166fa.json", projectID)
+			projectID := "project-ID"
+			gcs, err := storages.GCSInit("service_account_key", projectID)
 			if err!=nil {
 				c.JSON(503, gin.H{
 					"message": "could not access gcs",
